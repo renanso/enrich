@@ -28,7 +28,8 @@ BiocVersion: 3.16
 BiocManager: yes
 biocViews:
 Remotes:
-	jensenlab/primer3	
+	jensenlab/primer3,
+        mhahsler/rBLAST
 Depends:
 	devtools,
 	BiocManager,
