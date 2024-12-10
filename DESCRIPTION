@@ -34,7 +34,7 @@ Depends:
 	BiocManager,
 	usethis,
 	dplyr,
-  stringr,
+        stringr,
  	tidyr,
 	ggplot2,
 	Biostrings,
@@ -42,7 +42,7 @@ Depends:
 	rtracklayer,
 	GenomicRanges,
 	rBLAST,
-  primer3
+        primer3
 Suggests: 
     	knitr,
     	rmarkdown
