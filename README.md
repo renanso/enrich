@@ -9,12 +9,19 @@ https://www.ncbi.nlm.nih.gov/books/NBK569861/
 Key package for R:
 primer3
 https://github.com/jensenlab/primer3
+
+rBLAST
+https://github.com/mhahsler/rBLAST
+
 Biostrings
 https://www.bioconductor.org/packages/release/bioc/html/Biostrings.html
+
 dplyr
 https://dplyr.tidyverse.org/
+
 stringr
 https://stringr.tidyverse.org/index.html
+
 ggplot2
 https://ggplot2.tidyverse.org/
 
