@@ -6,7 +6,14 @@ The first part of the pipeline is a script that extracts the flanking sequences 
 A key component of the pipeline is BLAST. It is important to make sure that BLAST is correctly installed and added to the PATH. For more information on BLAST configuration please refer to:
 https://www.ncbi.nlm.nih.gov/books/NBK569861/
 
-Key package for R:
+
+## Installation
+
+# Install the latest version directly from GitHub
+install.packages("devtools")
+devtools::install_github("renanso/enrich")
+
+Key packages:
 primer3
 https://github.com/jensenlab/primer3
 
