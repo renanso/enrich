@@ -244,13 +244,14 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   geom_bar(stat="identity") +
   geom_text(aes(label=vals), vjust=-0.5, size = 5) +
   ggtitle("Probe Summary") +
-  ylab("probes") +
+  ylab("probes (log10)") +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1, size = 15),
         axis.text.y = element_text(size = 15),
         axis.title.x = element_text(size = 15),
         axis.title.y = element_text(size = 15),
-        plot.title = element_text(size=20))
+        plot.title = element_text(size=20)) +
+  scale_y_log10()
   pdf("plot_filters.pdf", width = 15, height = 10)
   print(plot2) 
   dev.off() 
