@@ -147,7 +147,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   probes3<-probes2 %>% dplyr::filter(chr_match == "TRUE") %>% dplyr::filter(pos_match == "TRUE")
   ## drop the initial datasets to free up memory
   message("Done")
-  rm(blast_result, probes1, probes2)
+  rm(blast_result, probes1)
   gc()
   ## Thermodynamics
   #prepare data set adding sequence to blast results filtered
@@ -233,8 +233,30 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   ## Filter for one probe per gene
   probes10<- probes9 %>% dplyr::distinct(gene, .keep_all = TRUE)
   message("Done")
-  message("Plot probe position")
+  #Visualize probe filters
+  message("Plot probe filter")
+  ## plot probe filtering
+  vals<- c(nrow(df3), nrow(df4), nrow(probes2), nrow(probes3), nrow(probes6), nrow(probes9), nrow(probes10))
+  filters<-c("1-all_candidates","2-gc_test","3-blast_test","4-position_test","5-tm_test","6-structure_test","7-unique_test")
+  flow_data<- data.frame(cbind(filters,vals))
+  flow_data$vals<-as.numeric(flow_data$vals)
+  plot2<-ggplot(flow_data, aes(y=vals, x=filters)) + 
+  geom_bar(stat="identity") +
+  geom_text(aes(label=vals), vjust=-0.5, size = 5) +
+  ggtitle("Probe Summary") +
+  ylab("probes") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 30, vjust = 1, hjust=1, size = 15),
+        axis.text.y = element_text(size = 15),
+        axis.title.x = element_text(size = 15),
+        axis.title.y = element_text(size = 15),
+        plot.title = element_text(size=20))
+  pdf("plot_filters.pdf", width = 15, height = 10)
+  print(plot2) 
+  dev.off() 
+  message("Done")
   ## Visualize probe positions
+  message("Plot probe position")
   ##bins every 1M
   dist=1e6
   bins<-seq(from=1, to=0.8e11, by=dist)
