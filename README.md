@@ -9,10 +9,10 @@ https://www.ncbi.nlm.nih.gov/books/NBK569861/
 
 ## Installation
 
-# Install the latest version directly from GitHub
+```
 install.packages("devtools")
 devtools::install_github("renanso/enrich")
-
+```
 Key packages:
 primer3
 https://github.com/jensenlab/primer3
