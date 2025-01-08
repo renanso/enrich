@@ -34,5 +34,5 @@ For the package rBLAST to work, the BLAST software needs to be installed https:/
 Check if that the path environment variables are correctly set.
 If needed add the BLAST executable to the PATH:
 ```
-export PATH=/path_to_folder/blast/ncbi-blast-2.XX.X+/bin
+PATH=$PATH:~/path_to_folder/blast/ncbi-blast-2.XX.X+/bin
 ```
