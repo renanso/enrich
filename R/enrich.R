@@ -113,7 +113,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
     dna <- Biostrings::readDNAStringSet('candidates_gc_filtered.fasta', format='fasta')
     ## 2. make database
     message("Blast Database creation")
-    rBLAST::makeblastdb(file = ref, db_name = blast_db, dbtype = "nucl", args = "-max_file_sz 50GB") #name your database
+    rBLAST::makeblastdb(file = ref, db_name = blast_db, dbtype = "nucl", args = "-parse_seqids") #name your database
     ## 3. open database
     db <- rBLAST::blast(blast_db)
     ## 4. perform search (first sequence in the db should be a perfect match)
