@@ -28,3 +28,11 @@ https://stringr.tidyverse.org/index.html
 ggplot2
 https://ggplot2.tidyverse.org/
 
+## BLAST
+
+For the package rBLAST to work, the BLAST software needs to be installed https://www.ncbi.nlm.nih.gov/books/NBK569861/
+Check if that the path environment variables are correctly set.
+If needed add the BLAST executable to the PATH:
+```
+export PATH=/path_to_folder/blast/ncbi-blast-2.XX.X+/bin
+```
