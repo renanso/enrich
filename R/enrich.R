@@ -186,6 +186,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   message("Applying filter for Tm")
   probes6<- probes5 %>% dplyr::filter(tm >= tm_min, tm <= tm_max)
   message("Done")
+  message(paste("candidate probes here:",nrow(probes6)))
   
   ## Histograms
   pdf("TM_gc_after_filter.pdf")
