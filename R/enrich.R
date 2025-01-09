@@ -121,13 +121,15 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
     blast_result<-predict(db, dna)
   }
   message("Done")
- 
+  message(paste("Size of BLAST object:",nrow(blast_result)))
+  
   ## Filter BLAST, Tm, hairpin and homodimer calculations
   ## Filter 1: % of identity and fragment length
   #probes binding in the correct place and with high identity to off targets will pass.
   message("Filtering length and identity in the Blast result")
   probes1<- blast_result %>% dplyr::filter(length == len) %>% dplyr::filter(pident > pid)
- 
+  message(paste("Candidate probes here:",nrow(probes1)))
+  
   ## check unique genes before next filter
   gene<-(stringr::str_split_fixed(probes1$qseqid, '\\|', 3))[,2]
   probes1$gene<-gene
@@ -142,6 +144,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
     dplyr::filter(n()<=blast_hit)
   summary(probes2$gene)
   message("Done")
+  message(paste("Candidate probes here:",nrow(probes2)))
   
   ## Filter 3: Matching pattern to filter probes with specific match to target region. these filter are used to remove potential off-targets
   ## chromosome and position match test
@@ -162,6 +165,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   
   ## filter chromosome and positions
   probes3<-probes2 %>% dplyr::filter(chr_match == "TRUE") %>% dplyr::filter(pos_match == "TRUE")
+  message(paste("Candidate probes here:",nrow(probes3)))
   
   ## drop the initial datasets to free up memory
   message("Done")
@@ -186,7 +190,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   message("Applying filter for Tm")
   probes6<- probes5 %>% dplyr::filter(tm >= tm_min, tm <= tm_max)
   message("Done")
-  message(paste("candidate probes here:",nrow(probes6)))
+  message(paste("Candidate probes here:",nrow(probes6)))
   
   ## Histograms
   pdf("TM_gc_after_filter.pdf")
