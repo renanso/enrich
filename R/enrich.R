@@ -94,6 +94,9 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, bla
   hist(df3$gc, main = "Original GC %", breaks = 5)
   hist(df4$gc, main = "Filtered GC %", breaks = 5)
   dev.off()
+
+  #probe candidates number
+  message(paste("Number of GC filtered candidates:",nrow(df4)))
   
   ##changing table to fasta format
   df4[,2] <- paste0(">",df4[,2]) #add ">" to headers
