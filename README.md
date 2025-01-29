@@ -29,7 +29,7 @@ https://ggplot2.tidyverse.org/
 
 For the package to work, the BLAST software needs to be installed https://www.ncbi.nlm.nih.gov/books/NBK569861/
 
-Add the path to BLAST executables to the function:
+Add the path to BLAST executables to the main function:
 ```
 makeblastdb_path= "/path/to//blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
 blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn" 
