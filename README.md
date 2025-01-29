@@ -13,9 +13,6 @@ Key packages:
 primer3
 https://github.com/jensenlab/primer3
 
-rBLAST
-https://github.com/mhahsler/rBLAST
-
 Biostrings
 https://www.bioconductor.org/packages/release/bioc/html/Biostrings.html
 
@@ -30,9 +27,10 @@ https://ggplot2.tidyverse.org/
 
 ## BLAST
 
-For the package rBLAST to work, the BLAST software needs to be installed https://www.ncbi.nlm.nih.gov/books/NBK569861/
+For the package to work, the BLAST software needs to be installed https://www.ncbi.nlm.nih.gov/books/NBK569861/
 
-Add the BLAST executable to the PATH:
+Add the path to BLAST executables to the function:
 ```
-PATH=$PATH:~/path_to_folder/blast/ncbi-blast-2.XX.X+/bin
+makeblastdb_path= "/path/to//blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
+blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn" 
 ```
