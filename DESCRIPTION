@@ -1,0 +1,48 @@
+Package: enRich
+Title: Probe design for target sequencing
+Version: 1.12.0
+Authors@R: 
+    c(person(given = "Renan",
+           family = "Souza",
+           role = c("aut", "cre"),
+           email = "renansagro@gmail.com"),
+    person(given = "Alex",
+           family = "Harkess",
+           role = "ctb"),
+    person(given = "Josh",
+           family = "Clevenger",
+           role = "ctb"),
+    person(given = "Walid",
+           family = "Korani",
+           role = "ctb"),
+    person(given = "David",
+           family = "Van Tassel",
+           role = "ctb"))
+Description: enRich is tool to design 120 bp DNA probes for target sequencing. The tool extracts the flanking sequences of target SNPs and produces a fragment. Then it performs sliding window to produce 120 bp probes. Finally a BLAST is performed on the candidate probes to identify the potential binding sites and off targets. The third part takes the BLAST results and the sequences themselves to perform filtering for uniqueness, GC, Tm and thermodynamic calculations such as haipin and homodimer to select probes for multiplexing.
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Repository: CRAN
+BiocVersion: 3.16
+BiocManager: yes
+biocViews:
+Remotes:
+	jensenlab/primer3
+Depends:
+	devtools,
+	BiocManager,
+	usethis,
+	dplyr,
+    stringr,
+ 	tidyr,
+	ggplot2,
+	Biostrings,
+	BSgenome,
+	rtracklayer,
+	GenomicRanges,
+	primer3
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
