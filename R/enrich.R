@@ -28,7 +28,7 @@
 #' HmTm= 60 # Heterodimer maximum Tm (default 60)
 #' # Run the function
 #' library(enRich)
-#' enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm)
+#' enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, makeblastdb_path, blastn_path, blast_out, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm)
 #' @importFrom dplyr %>%
 #' @export
 enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, 
