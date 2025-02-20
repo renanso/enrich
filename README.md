@@ -31,6 +31,6 @@ For the package to work, the BLAST software needs to be installed https://www.nc
 
 Add the path to BLAST executables to the main function:
 ```
-makeblastdb_path= "/path/to//blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
+makeblastdb_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
 blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn" 
 ```
