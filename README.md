@@ -37,4 +37,4 @@ blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn"
 
 ## Reference
 
-[![DOI](https://zenodo.org/badge/923918850.svg)](https://doi.org/10.5281/zenodo.20562560)
+[![DOI](https://zenodo.org/badge/923918850.svg)](https://doi.org/10.5281/zenodo.20562561)
