@@ -3,6 +3,7 @@
 #' @examples
 #' # example code
 #' #input values
+#' threads= 16 # number of threads for blast search
 #' ref= system.file("extdata", "genome.fasta", package = "enRich")# reference genome
 #' file.copy(ref,"./") #saving reference genome in the directory
 #' index=system.file("extdata", "genome.fasta.fai", package = "enRich")# reference genome index
@@ -135,7 +136,8 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
                      " -db ", blast_db,
                      " -query ", "./candidates_gc_filtered.fasta",
                      " -out ", blast_out,
-                     " -outfmt 6")
+                     " -outfmt 6",
+                     " -num_threads", threads)
   # Run the BLASTN command
   system(command2)
   
