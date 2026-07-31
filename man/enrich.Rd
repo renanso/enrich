@@ -35,11 +35,11 @@ This is the main function of the package.
 # example code
 #input values
 ref= system.file("extdata", "genome.fasta", package = "enRich")# reference genome
-file.copy(ref,"./") #saving reference genome in the directory
+file.copy(ref,"./", overwrite = TRUE) #saving reference genome in the directory
 index=system.file("extdata", "genome.fasta.fai", package = "enRich")# reference genome index
-file.copy(index,"./") #saving index in the current directory
+file.copy(index,"./", overwrite = TRUE) #saving index in the current directory
 bed_file= system.file("extdata", "bed_test.bed", package = "enRich") # bed file
-file.copy(bed_file,"./") #savind bed file in the current directory
+file.copy(bed_file,"./", overwrite = TRUE) #savind bed file in the current directory
 blast_db= "./db/genome" #blast database name
 makeblastdb_path= "/path/to//blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
 blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn" 
