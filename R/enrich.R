@@ -121,14 +121,18 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   Sys.which("blastn")
   
   # Construct the makeblastdb command
+
+  if (!blast_db) {
   command1 <- paste0(makeblastdb_path,
                      " -in ", ref,
                      " -dbtype ", "nucl",
                      " -out ", blast_db,
                      " -parse_seqids ")
-  # Run the makeblastdb command
   system(command1)
-  message("Done")
+  message("BLAST database created successfully")
+  } else {
+  message("BLAST database already exists. Skipping database creation.")
+  }
   
   message("Running Blast")
   # Construct the BLASTN command
