@@ -76,12 +76,8 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
     dplyr::ungroup() %>%
     dplyr::select(qseqid, Windows)
   
-  windows_list <- as.list(df2$Windows)
-  names(windows_list) <- df2$qseqid
-  df3 <- stack(windows_list)
-  
-  #names(df2$Windows)<-df2$qseqid
-  #df3<-stack(df2$Windows)
+  names(df2$Windows)<-df2$qseqid
+  df3<-stack(df2$Windows)
   
   ## add unique number to each probe
   df3$ind2<-paste0(df3$ind,"_",row.names(df3))
