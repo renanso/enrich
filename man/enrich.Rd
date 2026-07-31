@@ -23,7 +23,8 @@ enrich(
   tm_min,
   tm_max,
   HpTm,
-  HmTm
+  HmTm,
+  threads
 )
 }
 \description{
@@ -56,7 +57,8 @@ tm_min= 70 # minimum Tm (default 70)
 tm_max= 76 #maximum Tm (default 76)
 HpTm= 60 #Hairpin maximum Tm (default 60)
 HmTm= 60 # Heterodimer maximum Tm (default 60)
+threads= 16 # set the number based on the request from the cluster
 # Run the function
 library(enRich)
-enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm)
+enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm, threads)
 }
