@@ -122,7 +122,12 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   
   # Construct the makeblastdb command
 
-  if (!blast_db) {
+  # check if database files exist
+  db_files <- paste0(blast_db, c(".nhr", ".nin", ".nsq"))
+  db_exists <- all(file.exists(db_files))
+
+  if (!db_exists) {
+  # Create database
   command1 <- paste0(makeblastdb_path,
                      " -in ", ref,
                      " -dbtype ", "nucl",
@@ -133,7 +138,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   } else {
   message("BLAST database already exists. Skipping database creation.")
   }
-  
+
   message("Running Blast")
   # Construct the BLASTN command
   command2 <- paste0(blastn_path,
