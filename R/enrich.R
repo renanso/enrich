@@ -3,7 +3,6 @@
 #' @examples
 #' # example code
 #' #input values
-#' threads= 16 # number of threads for blast search
 #' ref= system.file("extdata", "genome.fasta", package = "enRich")# reference genome
 #' file.copy(ref,"./") #saving reference genome in the directory
 #' index=system.file("extdata", "genome.fasta.fai", package = "enRich")# reference genome index
@@ -27,6 +26,7 @@
 #' tm_max= 76 #maximum Tm (default 76)
 #' HpTm= 60 #Hairpin maximum Tm (default 60)
 #' HmTm= 60 # Heterodimer maximum Tm (default 60)
+#' threads= 16 # number of threads for blast search
 #' # Run the function
 #' library(enRich)
 #' enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, makeblastdb_path, blastn_path, blast_out, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm)
