@@ -146,7 +146,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
                      " -query ", "./candidates_gc_filtered.fasta",
                      " -out ", blast_out,
                      " -outfmt 6",
-                     " -num_threads", threads)
+                     " -num_threads ", threads)
   # Run the BLASTN command
   system(command2)
   
