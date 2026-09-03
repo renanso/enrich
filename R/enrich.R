@@ -10,8 +10,8 @@
 #' bed_file= system.file("extdata", "bed_test.bed", package = "enRich") # bed file
 #' file.copy(bed_file,"./", overwrite = TRUE) #savind bed file in the current directory
 #' blast_db= "./db/genome" #blast database name
-#' makeblastdb_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
-#' blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn" 
+#' makeblastdb_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/makeblastdb"
+#' blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn"
 #' blast_out="./blast_result.txt"
 #' frag_size=400 # frament size in bp for the region with the target SNP in the center
 #' w_size= 120 #size of the probe
@@ -32,7 +32,7 @@
 #' enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, makeblastdb_path, blastn_path, blast_out, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm)
 #' @importFrom dplyr %>%
 #' @export
-enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max, 
+enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
                    blast_db, makeblastdb_path, blastn_path, blast_out, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm, threads)
 
 {
@@ -46,13 +46,13 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   df <- data.frame(seq_name, sequence)
   message("Done")
   colnames(df)<-c('qseqid','sequence')
-  
+
   ## Read Bed file
   message("Reading bed file")
   bed<-read.table(bed_file)
   colnames(bed)<-c("chr","start","end","locus")
   message("Done")
-  
+
   ## Cut targets
   message("Cutting fragments")
   bed$strand <- rep("+", nrow(bed))
@@ -64,7 +64,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   colnames(df1)<-c('qseqid','sequence')
   write.csv(df1, "targets_seq.csv")
   message("Done")
-  
+
   ## Slide window
   message("Running sliding window")
   df2<-df1 %>%
@@ -75,26 +75,26 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
     dplyr::mutate(Window_ID = paste(qseqid, row_number(), sep = "_")) %>%
     dplyr::ungroup() %>%
     dplyr::select(qseqid, Windows)
-  
+
   names(df2$Windows)<-df2$qseqid
   df3<-stack(df2$Windows)
-  
+
   ## add unique number to each probe
   df3$ind2<-paste0(df3$ind,"_",row.names(df3))
   df3<-df3[,c(1,3)]
   message("Done")
-  
+
   ## GC filter
   message("Calculating GC%")
   colnames(df3)<-c('sequence', 'qseqid')
   df3$gc<-round(as.numeric(sapply(df3[,1],gc_fun)),1)
   message("Done")
-  
+
   ##Apply filters
   message("GC% filter")
   df4<- df3 %>% dplyr::filter(gc >= gc_min, gc <= gc_max)
   message("Done")
-  
+
   #plot gc content before and after
   pdf("gc_content.pdf")
   par(mfrow=c(1,2))
@@ -104,23 +104,23 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
 
   #probe candidates number
   message(paste("Number of GC filtered candidates:",nrow(df4)))
-  
+
   ##changing table to fasta format
   df4[,2] <- paste0(">",df4[,2]) #add ">" to headers
-  
+
   #bind rows of headers and seqs
   probes_fasta <- c(rbind(df4[,2], df4[,1]))
   probes_fasta[1:10]
   write.table(probes_fasta, "candidates_gc_filtered.fasta", row.names=FALSE,sep="\t", quote = FALSE, col.names = FALSE)
-  
+
   ##BLAST
-  
+
   message("Creating Blast database")
-  
+
   # check makeblastdb installation
   Sys.which("makeblastdb")
   Sys.which("blastn")
-  
+
   # Construct the makeblastdb command
 
   # check if database files exist
@@ -150,32 +150,32 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
                      " -num_threads ", threads)
   # Run the BLASTN command
   system(command2)
-  
+
   #add names to columns
   blast_result<-read.table("blast_result.txt")
   blast_names<-c("qseqid","sseqid","pident","length","mismatch","gapopen","qstart","qend","sstart","send","evalue","bitscore")
   colnames(blast_result)<- blast_names
-  
-  message("Done") 
-  
+
+  message("Done")
+
   message(paste("Size of BLAST object:",nrow(blast_result)))
-  
+
   message("Filtering length and identity in the Blast result")
-  
+
   ## Filter BLAST, Tm, hairpin and homodimer calculations
   ## Filter 1: % of identity and fragment length
   #probes binding in the correct place and with high identity to off targets will pass.
-  
+
   probes1<- blast_result %>% dplyr::filter(length == len) %>% dplyr::filter(pident > pid)
   message(paste("Candidate probes here:",nrow(probes1)))
-  
+
   ## check unique genes before next filter
   gene<-(stringr::str_split_fixed(probes1$qseqid, '\\|', 3))[,2]
   probes1$gene<-gene
   probes1$gene<-as.factor(probes1$gene)
   summary(probes1$gene)
   message("Done")
-  
+
   ## Filter 2: Filter out probes that binds to other parts of the genome based on the blast_hit parameter
   message("Filtering probe candidates that binds to multiple sites in the genome")
   probes2<-probes1 %>%
@@ -184,33 +184,33 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   summary(probes2$gene)
   message("Done")
   message(paste("Candidate probes here:",nrow(probes2)))
-  
+
   ## Filter 3: Matching pattern to filter probes with specific match to target region. these filter are used to remove potential off-targets
   ## chromosome and position match test
   original_snp<-(stringr::str_split_fixed(probes2$qseqid, "\\|", 3))[,1]
   original_chr<-(stringr::str_split_fixed(original_snp, "_", 2))[,1]
   original_position<-as.numeric((stringr::str_split_fixed(original_snp, "_", 2))[,2])
-  
+
   ## comparing chromosome from original SNP name and the match in the Blast search
   message("Checking if probe is in the right chromosome and right position")
   probes2$original_chr<- original_chr
   probes2$target_chr<-probes2$sseqid
   probes2$chr_match<- probes2$original_chr==probes2$target_chr
-  
+
   ## comparing position from original SNP name and the match in the Blast search
   probes2$original_position<- original_position
   probes2$test<- probes2$original_position - probes2$sstart
   probes2$pos_match<- probes2$test < (frag_size/2) & probes2$test > -(frag_size/2) ##assuming the maximum distance base on the design 200bp up and down
-  
+
   ## filter chromosome and positions
   probes3<-probes2 %>% dplyr::filter(chr_match == "TRUE") %>% dplyr::filter(pos_match == "TRUE")
   message(paste("Candidate probes here:",nrow(probes3)))
-  
+
   ## drop the initial datasets to free up memory
   message("Done")
   rm(blast_result, probes1)
   gc()
-  
+
   ## Thermodynamics
   #prepare data set adding sequence to blast results filtered
   dna <- Biostrings::readDNAStringSet('candidates_gc_filtered.fasta', format='fasta')
@@ -219,26 +219,26 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   df5 <- data.frame(seq_name, sequence)
   colnames(df5)<-c('qseqid','sequence')
   probes5 <- (merge(df5, probes3, by = 'qseqid'))
-  
+
   ##Tm-iterate on the column (apply function to each row in a column)
   probes5$tm<-round(as.numeric(sapply(probes5[,2],calculate_tm)),1)
-  
+
   # probes were already filtered for GC, but we will add the information as a column
   probes5$gc<-round(as.numeric(sapply(probes5[,2],gc_fun)),1)
-  
+
   ## Apply Tm filters
   message("Applying filter for Tm")
   probes6<- probes5 %>% dplyr::filter(tm >= tm_min, tm <= tm_max)
   message("Done")
   message(paste("Candidate probes here:",nrow(probes6)))
-  
+
   ## Histograms
   pdf("TM_gc_after_filter.pdf")
   par(mfrow=c(1,2))
   hist(probes6$gc, main = "GC content filtered")
   hist(probes6$tm, main = "Tm filtered")
   dev.off()
-  
+
   ##secondary structure
   ##Note that the maximum length of ``seq`` is 60 bp. This is a cap suggested
   #by the Primer3 team as the longest reasonable sequence length for which a
@@ -256,10 +256,10 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   probes6$frag4<-substr(probes6$sequence, 31, 90)
   probes6$frag5<-paste0(substr(probes6$sequence, 1, 30), substr(probes6$sequence, 61, 90))
   probes6$frag6<-paste0(substr(probes6$sequence, 31, 60), substr(probes6$sequence, 91, 120))
-  
+
   #fragment list
   fragments<- list(probes6$frag1,probes6$frag2,probes6$frag3,probes6$frag4,probes6$frag5,probes6$frag6)
-  
+
   ##hairpin Tm calculation
   message("Hairpin Tm calculation")
   probes6_hairpin<-lapply(fragments,calculate_hairpin)
@@ -270,7 +270,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   probes6$hairpin_temp_frag5<-probes6_hairpin[[5]][["temp"]]
   probes6$hairpin_temp_frag6<-probes6_hairpin[[6]][["temp"]]
   message("Done")
-  
+
   ## homodimer Tm calculation
   message("Homodimer Tm calculation")
   probes6_homodimer<-lapply(fragments,calculate_homodimer)
@@ -282,7 +282,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   probes6$homodimer_temp_frag6<-probes6_homodimer[[6]][["temp"]]
   message("Done")
   message("Hairpin and homodimer filters")
-  
+
   ## filter for hairpin Tm
   probes7<- probes6 %>% dplyr::filter(hairpin_temp_frag1 < HpTm) %>%
     dplyr::filter(hairpin_temp_frag2 < HpTm) %>%
@@ -290,7 +290,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
     dplyr::filter(hairpin_temp_frag4 < HpTm) %>%
     dplyr::filter(hairpin_temp_frag5 < HpTm) %>%
     dplyr::filter(hairpin_temp_frag6 < HpTm)
-  
+
   ## filter for homodimer Tm
   probes8<- probes7 %>% dplyr::filter(homodimer_temp_frag1 < HmTm) %>%
     dplyr::filter(homodimer_temp_frag2 < HmTm) %>%
@@ -300,16 +300,16 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
     dplyr::filter(homodimer_temp_frag6 < HmTm)
   message("Done")
   message("Sort probes by GC%")
-  
+
   ## sort probes from highest GC
   probes9 <- probes8[order(probes8$gc, decreasing = TRUE),]
   message("Done")
   message("Keeping one probe per gene")
-  
+
   ## Filter for one probe per gene
   probes10<- probes9 %>% dplyr::distinct(gene, .keep_all = TRUE)
   message("Done")
-  
+
   #Visualize probe filters
   message("Plot probe filter")
   ## plot probe filtering
@@ -317,7 +317,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   filters<-c("1-all_candidates","2-gc_test","3-blast_test","4-position_test","5-tm_test","6-structure_test","7-unique_test")
   flow_data<- data.frame(cbind(filters,vals))
   flow_data$vals<-as.numeric(flow_data$vals)
-  plot2<-ggplot(flow_data, aes(y=vals, x=filters)) + 
+  plot2<-ggplot(flow_data, aes(y=vals, x=filters)) +
   geom_bar(stat="identity") +
   geom_text(aes(label=vals), vjust=-0.5, size = 5) +
   ggtitle("Probe Summary") +
@@ -330,10 +330,10 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
         plot.title = element_text(size=20)) +
   scale_y_log10()
   pdf("plot_filters.pdf", width = 15, height = 10)
-  print(plot2) 
-  dev.off() 
+  print(plot2)
+  dev.off()
   message("Done")
-  
+
   ## Visualize probe positions
   message("Plot probe position")
   ##bins every 1M
@@ -342,19 +342,21 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   ##adding the bins to dataframe
   probes10$bins<-findInterval(probes10$sstart, bins)
   # extracting the info needed for plots
-  df6<-probes10[,c(3,10,35)]
+  #df6<-probes10[,c(3,10,35)]
+  df6<-probes10[,c(3,10,41)]
   df6$bins2<-paste0(df6$sseqid,"-",df6$bins)
   df7<-data.frame(table(df6$bins2))
   colnames(df7)<-c("bins2","freq")
   df8 <- merge(df6,df7,by="bins2")
   #keep unique bins
   df9<- df8 %>% dplyr::distinct(bins2, .keep_all = TRUE)
-  df9$original_chr <- as.numeric(gsub('Chr', '', df9$sseqid))
+  #df9$original_chr <- as.numeric(gsub('Chr', '', df9$sseqid))
+  df9$original_chr <- df9$sseqid #Added this line and commented out the previous because of chromosome name including letters after numbers)
   n_chr<- nrow(df)
   chr_len<- nchar(df$sequence)
   plot<- ggplot(df9,aes(x=sstart, y= original_chr)) +
          ggplot2::geom_count(aes(size=freq)) +
-         ggplot2::scale_y_continuous(breaks = seq(1, n_chr, by = 1)) +
+         #ggplot2::scale_y_continuous(breaks = seq(1, n_chr, by = 1)) +
          ggplot2::theme_bw() +
          ggplot2::theme(axis.line = element_line(colour = "black"),
                          panel.grid.major = element_blank(),panel.grid.minor = element_blank(),
@@ -369,7 +371,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   print(plot)
   dev.off()
   message("Done")
-  
+
   ## Formating the final files
   message("Saving final files")
   ## probes summary
@@ -386,5 +388,5 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   message("Done")
   message("enRich is finalized")
   proc.time()
-  
+
 }

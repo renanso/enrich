@@ -41,8 +41,8 @@ file.copy(index,"./", overwrite = TRUE) #saving index in the current directory
 bed_file= system.file("extdata", "bed_test.bed", package = "enRich") # bed file
 file.copy(bed_file,"./", overwrite = TRUE) #savind bed file in the current directory
 blast_db= "./db/genome" #blast database name
-makeblastdb_path= "/path/to//blast/ncbi-blast-2.1X.0+/bin/makeblastdb" 
-blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn" 
+makeblastdb_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/makeblastdb"
+blastn_path= "/path/to/blast/ncbi-blast-2.1X.0+/bin/blastn"
 blast_out="./blast_result.txt"
 frag_size=400 # frament size in bp for the region with the target SNP in the center
 w_size= 120 #size of the probe
@@ -57,8 +57,8 @@ tm_min= 70 # minimum Tm (default 70)
 tm_max= 76 #maximum Tm (default 76)
 HpTm= 60 #Hairpin maximum Tm (default 60)
 HmTm= 60 # Heterodimer maximum Tm (default 60)
-threads= 16 # set the number based on the request from the cluster
+threads= 16 # number of threads for blast search
 # Run the function
 library(enRich)
-enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm, threads)
+enrich("genome.fasta", "bed_test.bed", frag_size, w_size, s_size, gc_min, gc_max, blast_db, makeblastdb_path, blastn_path, blast_out, pid, len, blast_hit,tm_min, tm_max, HpTm, HmTm)
 }
