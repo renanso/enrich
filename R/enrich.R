@@ -170,7 +170,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   message(paste("Candidate probes here:",nrow(probes1)))
 
   ## check unique genes before next filter
-  gene<-(stringr::str_split_fixed(probes1$qseqid, '\\|', 3))[,2]
+  gene<-(stringr::str_split_fixed(probes1$qseqid, '\\|', 3))[,3]
   probes1$gene<-gene
   probes1$gene<-as.factor(probes1$gene)
   summary(probes1$gene)
