@@ -169,11 +169,11 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   probes1<- blast_result %>% dplyr::filter(length == len) %>% dplyr::filter(pident > pid)
   message(paste("Candidate probes here:",nrow(probes1)))
 
-  ## check unique genes before next filter
-  gene<-(stringr::str_split_fixed(probes1$qseqid, '\\|', 3))[,1]
-  probes1$gene<-gene
-  probes1$gene<-as.factor(probes1$gene)
-  summary(probes1$gene)
+  ## check unique sites before next filter
+  site<-(stringr::str_split_fixed(probes1$qseqid, '\\|', 3))[,1]
+  probes1$site<-site
+  probes1$site<-as.factor(probes1$site)
+  summary(probes1$site)
   message("Done")
 
   ## Filter 2: Filter out probes that binds to other parts of the genome based on the blast_hit parameter
@@ -181,7 +181,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   probes2<-probes1 %>%
     dplyr::group_by(qseqid) %>%
     dplyr::filter(n()<=blast_hit)
-  summary(probes2$gene)
+  summary(probes2$site)
   message("Done")
   message(paste("Candidate probes here:",nrow(probes2)))
 
@@ -306,8 +306,8 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   message("Done")
   message("Keeping one probe per gene")
 
-  ## Filter for one probe per gene
-  probes10<- probes9 %>% dplyr::distinct(gene, .keep_all = TRUE)
+  ## Filter for one probe per site
+  probes10<- probes9 %>% dplyr::distinct(site, .keep_all = TRUE)
   message("Done")
 
   #Visualize probe filters
