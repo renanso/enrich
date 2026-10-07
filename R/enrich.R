@@ -304,7 +304,7 @@ enrich <- function(ref, bed_file, frag_size, w_size, s_size, gc_min, gc_max,
   ## sort probes from highest GC
   probes9 <- probes8[order(probes8$gc, decreasing = TRUE),]
   message("Done")
-  message("Keeping one probe per gene")
+  message("Keeping one probe per site")
 
   ## Filter for one probe per site
   probes10<- probes9 %>% dplyr::distinct(site, .keep_all = TRUE)
